@@ -74,7 +74,6 @@ def today_wiki(query):
     if query.lower() == 'help':
         return today_wiki_payload
     today = datetime.now().strftime('%B %d')
-    print('Today: ', today)
     page = wikipedia.page(today)
     page_url = page.url
     sections = page.sections
