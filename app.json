@@ -1,0 +1,23 @@
+{
+    "name": "WikiBot",
+    "description": "Access Wikipedia content directly from Slack with slash commands",
+    "repository": "https://github.com/vforviswa/wikibot",
+    "keywords": [
+        "wikipedia",
+        "slack"
+    ],
+    "env": {
+        "SLACK_SIGNING_SECRET": {
+            "description": "Your Slack App's Signing Secret",
+            "value": "INSERT_VALUE"
+        },
+        "CLIENT_ID": {
+            "description": "Your Slack App's Client ID",
+            "value": "INSERT_VALUE"
+        },
+        "CLIENT_SECRET": {
+            "description": "Your Slack App's Client Secret",
+            "value": "INSERT_VALUE"
+        }
+    }
+}
