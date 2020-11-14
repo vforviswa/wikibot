@@ -1,6 +1,6 @@
 from collections import namedtuple
 from datetime import datetime
-from flask import Flask, request, abort, make_response, Response
+from flask import Flask, request, redirect, abort, make_response, Response
 import json
 import logging
 from logging.handlers import RotatingFileHandler
@@ -130,9 +130,46 @@ def background_worker(form):
         return make_response('An Error occured while connecting to Wikipedia. Please try again after some time.', 400)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def status():
     return "Bot is running"
+
+
+@app.route('/auth')
+def auth():
+    code = request.args.get('code')
+    if not code:
+        return Response(status=401)
+    
+    client_id = os.environ.get('CLIENT_ID')
+    client_secret = os.environ.get('CLIENT_SECRET')
+
+    if not client_id:
+        return make_response('Undefined Client ID')
+
+    if not client_secret:
+        return make_response('Undefined Client Secret')
+    
+    oauth_url = 'https://slack.com/api/oauth.v2.access'
+    data = {
+        'code': code, 
+        'client_id': client_id, 
+        'client_secret': client_secret
+    }
+    response = requests.post(oauth_url, data=data)
+    if response.status_code != 200:
+        return Response(status=400)
+
+    access_token = response.json()['access_token']
+
+    # Redirect the User to their Team's Slack
+    team_info_url = 'https://slack.com/api/team.info'
+    response = requests.post(team_info_url, data={'token': access_token})
+    if response.status_code == 200:
+        team_domain = response.json()['team']['domain']
+        return redirect(f'https://{team_domain}.slack.com')
+    else:
+        return Response(status=200)
 
 
 @app.route('/', methods=['POST'])
