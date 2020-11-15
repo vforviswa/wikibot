@@ -45,11 +45,16 @@ Now that we have setup our Slack App, it is time for us to deploy our Applicatio
 
 Slack will send a request to the Public URL that we've configured in Slash Commands. So, if we are to develop locally, I would suggest you to go with [ngrok](https://ngrok.com/). Ngrok will provide a secure URL to our localhost server through NAT. Please read [Using ngrok to develop locally for Slack](http://api.slack.com/tutorials/tunneling-with-ngrok) for setting up your application to run locally.
  
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/vforviswa/wikibot)
+
 We'll be using [Heroku's](https://www.heroku.com/) platform to deploy the Application
 1. Create a free account, if you already don't have one.
 2. Click on the button below which will automatically take you to the Heroku's Page.
+3. Enter a name for your App and fill the Config Vars that we got from above.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+![Heroku New App](images/heroku-create-new-app.png)
+
+
 
 ### Configuring Slash Commands
 The final step is to configure the slash commands
