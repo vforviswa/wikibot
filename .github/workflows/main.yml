@@ -1,0 +1,40 @@
+name: lambda deployment
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    
+    - name: Configure AWS credentials from Production account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+        profile_name: default
+        project_name: WikiBot
+        runtime: python3.8
+        
+    - name: Run a multi-line script
+      run: |
+         python -m pip install --upgrade pip
+         pip3 install -r requirements.txt -t .
+         zip -r test-dep-dev.zip .
+         export PATH=$PATH:$(pwd)
+         
+    - name: AWS Lambda Deploy
+      uses: appleboy/lambda-action@v0.0.4
+      with:
+            function_name: wikibot
+            zip_file: wikibot.zip
